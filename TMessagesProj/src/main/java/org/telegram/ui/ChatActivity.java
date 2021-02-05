@@ -17966,6 +17966,24 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(27);
                             icons.add(R.drawable.msg_viewreplies);
                         }
+
+                        if (!isThreadChat() && groupedMessages != null && chatMode != MODE_SCHEDULED && currentChat != null && groupedMessages.hasSibling && groupedMessages.hasCaption && /*currentChat.has_link &&*/ currentChat.megagroup) {
+                            boolean groupedReply = false;
+                            MessageObject msgObj = null;
+                            for(MessageObject msg : groupedMessages.messages){
+                                if(msg.hasReplies() && msg.caption != null){
+                                    groupedReply = true;
+                                    msgObj = msg;
+
+                                }
+                            }
+                            if(groupedReply && msgObj != null && !items.contains(LocaleController.formatPluralString("ViewReplies", msgObj.getRepliesCount()))){
+                                items.add(LocaleController.formatPluralString("ViewReplies", msgObj.getRepliesCount()));
+                                options.add(27);
+                                icons.add(R.drawable.msg_viewreplies);
+                            }
+                        }
+
                         if (chatMode != MODE_SCHEDULED && ChatObject.isChannel(currentChat) && selectedObject.getDialogId() != mergeDialogId) {
                             items.add(LocaleController.getString("CopyLink", R.string.CopyLink));
                             options.add(22);
@@ -20315,7 +20333,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (openLinkInternally(urlFinal, messageObject != null ? messageObject.getId() : 0)) {
                         if(isThreadChat()){
                             wasThreadChat = true;
-                            Browser.openUrl(getParentActivity(), urlFinal, inlineReturn == 0);//pp
+                            Browser.openUrl(getParentActivity(), urlFinal, inlineReturn == 0);
                         }
                         return;
                     }
