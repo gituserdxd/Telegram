@@ -5682,12 +5682,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         return 0;
     }
 
-	private int getRightInset() {
-		if (lastInsets != null && Build.VERSION.SDK_INT >= 21) {
-			return ((WindowInsets) lastInsets).getSystemWindowInsetRight();
-		}
-		return 0;
-	}
+    private int getRightInset() {
+        if (lastInsets != null && Build.VERSION.SDK_INT >= 21) {
+            return ((WindowInsets) lastInsets).getSystemWindowInsetRight();
+        }
+        return 0;
+    }
 
     private void dismissInternal() {
         try {
@@ -5902,7 +5902,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             x = max;
         }
         videoPreviewFrame.setTranslationX(x);
-     }
+    }
 
     private void showVideoSeekPreviewPosition(boolean show) {
         if (show && videoPreviewFrame.getTag() != null || !show && videoPreviewFrame.getTag() == null) {
@@ -10029,6 +10029,14 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             MessageObject newMessageObject = imagesArr.get(currentIndex);
             sameImage = init && currentMessageObject != null && currentMessageObject.getId() == newMessageObject.getId();
             currentMessageObject = newMessageObject;
+            if( newMessageObject.isDocument() && paintButton.getVisibility() == View.VISIBLE) {
+                if(!(newMessageObject.getFileName().endsWith(".jpg") || newMessageObject.getFileName().endsWith(".png") || newMessageObject.getFileName().endsWith(".jpeg") || newMessageObject.getFileName().endsWith(".gif") || newMessageObject.getFileName().endsWith(".webp") || newMessageObject.getFileName().endsWith(".heic"))) {
+                    paintButton.setVisibility(View.GONE);
+                }
+                else{
+                    paintButton.setVisibility(View.VISIBLE);
+                }
+            }
             isVideo = newMessageObject.isVideo();
             if (sharedMediaType == MediaDataController.MEDIA_FILE) {
                 if (canZoom = newMessageObject.canPreviewDocument()) {
@@ -11011,7 +11019,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         if (Instance != null) {
             result = Instance.isVisible && !Instance.disableShowCheck && object != null &&
                     ((Instance.currentFileLocation != null && object.local_id == Instance.currentFileLocation.location.local_id && object.volume_id == Instance.currentFileLocation.location.volume_id && object.dc_id == Instance.currentFileLocation.dc_id) ||
-                     (Instance.currentFileLocationVideo != null && object.local_id == Instance.currentFileLocationVideo.location.local_id && object.volume_id == Instance.currentFileLocationVideo.location.volume_id && object.dc_id == Instance.currentFileLocationVideo.dc_id));
+                            (Instance.currentFileLocationVideo != null && object.local_id == Instance.currentFileLocationVideo.location.local_id && object.volume_id == Instance.currentFileLocationVideo.location.volume_id && object.dc_id == Instance.currentFileLocationVideo.dc_id));
         }
         return result;
     }
